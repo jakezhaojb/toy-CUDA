@@ -1,0 +1,8 @@
+*.so
+*.a
+*.o
+*.jpg
+*.png
+*a.out
+*.gold
+HW*
