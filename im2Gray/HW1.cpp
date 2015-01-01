@@ -55,6 +55,15 @@ void preProcess(uchar4 **inputImage, unsigned char **greyImage,
   checkCudaErrors(cudaMemset(*d_greyImage, 0, numPixels * sizeof(unsigned char))); //make sure no memory is left laying around
 
   //copy input array to the GPU
+  for (int i = 0; i < 160; i+=30) {
+    for (int j = 0; j < 460; j+=30) {
+      uchar4 rgba =  (*inputImage)[i * numCols() + j];
+      printf("%u, ", rgba.x);
+      printf("%u, ", rgba.y);
+      printf("%u, ", rgba.z);
+    }
+    printf("\n");
+  }
   checkCudaErrors(cudaMemcpy(*d_rgbaImage, *inputImage, sizeof(uchar4) * numPixels, cudaMemcpyHostToDevice));
 
   d_rgbaImage__ = *d_rgbaImage;
