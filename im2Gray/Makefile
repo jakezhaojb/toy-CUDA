@@ -22,13 +22,13 @@ OPENCV_INCLUDEPATH=/home/jz1672/include
 
 OPENCV_LIBS=-lopencv_core -lopencv_imgproc -lopencv_highgui
 
-CUDA_INCLUDEPATH=/usr/local/pkg/cuda/current/cuda/include
+CUDA_INCLUDEPATH=/share/apps/cuda/6.5.12/include
 ######################################################
 # On Macs the default install locations are below    #
 # ####################################################
 
 #CUDA_INCLUDEPATH=/usr/local/cuda/include
-CUDA_LIBPATH=/usr/local/pkg/cuda/current/cuda/lib
+CUDA_LIBPATH=/share/apps/cuda/6.5.12/lib
 #NVCC_OPTS=-O3 -arch=sm_20 -Xcompiler -Wall -Xcompiler -Wextra -m64
 NVCC_OPTS=
 
@@ -42,7 +42,7 @@ main.o: main.cpp timer.h utils.h reference_calc.cpp compare.cpp HW1.cpp
 	g++ -c main.cpp $(GCC_OPTS) -I $(CUDA_INCLUDEPATH) -I $(OPENCV_INCLUDEPATH)
 
 student_func.o: student_func.cu utils.h
-	nvcc -c student_func.cu $(NVCC_OPTS)
+	$(NVCC) -c student_func.cu $(NVCC_OPTS)
 
 compare.o: compare.cpp compare.h
 	g++ -c compare.cpp -I $(OPENCV_INCLUDEPATH) $(GCC_OPTS) -I $(CUDA_INCLUDEPATH)

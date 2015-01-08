@@ -75,23 +75,8 @@ int main(int argc, char **argv) {
   }
 
   size_t numPixels = numRows()*numCols();
-  int i ,j ;
-  for (i = 50; i < 160; i+=30) {
-    for (j = 50; j < 460; j+=30) {
-      printf("%u ", h_greyImage[i * numCols() + j]);
-    }
-    printf("\n");
-  }
 
   checkCudaErrors(cudaMemcpy(h_greyImage, d_greyImage, sizeof(unsigned char) * numPixels, cudaMemcpyDeviceToHost));
-
-  printf("------------------\n");
-  for (i = 50; i < 160; i+=30) {
-    for (j = 50; j < 460; j+=30) {
-      printf("%u ", h_greyImage[i * numCols() + j]);
-    }
-    printf("\n");
-  }
 
   //check results and output the grey image
   postProcess(output_file, h_greyImage);
