@@ -21,7 +21,8 @@ void your_gaussian_blur(const uchar4 * const h_inputImageRGBA, uchar4 * const d_
                         unsigned char *d_redBlurred,
                         unsigned char *d_greenBlurred,
                         unsigned char *d_blueBlurred,
-                        const int filterWidth);
+                        const int filterWidth,
+                        const float* const h_filter);
 
 void allocateMemoryAndCopyToGPU(const size_t numRowsImage, const size_t numColsImage,
                                 const float* const h_filter, const size_t filterWidth);
@@ -77,14 +78,15 @@ int main(int argc, char **argv) {
              &d_redBlurred, &d_greenBlurred, &d_blueBlurred,
              &h_filter, &filterWidth, input_file);
 
-  allocateMemoryAndCopyToGPU(numRows(), numCols(), h_filter, filterWidth);
+  //allocateMemoryAndCopyToGPU(numRows(), numCols(), h_filter, filterWidth);
   GpuTimer timer;
   timer.Start();
   //call the students' code
   your_gaussian_blur(h_inputImageRGBA, d_inputImageRGBA, d_outputImageRGBA, numRows(), numCols(),
-                     d_redBlurred, d_greenBlurred, d_blueBlurred, filterWidth);
+                     d_redBlurred, d_greenBlurred, d_blueBlurred, filterWidth, h_filter);
   timer.Stop();
-  cudaDeviceSynchronize(); checkCudaErrors(cudaGetLastError());
+  cudaDeviceSynchronize(); 
+  //checkCudaErrors(cudaGetLastError());
   int err = printf("Your code ran in: %f msecs.\n", timer.Elapsed());
 
   if (err < 0) {
@@ -97,7 +99,14 @@ int main(int argc, char **argv) {
 
   size_t numPixels = numRows()*numCols();
   //copy the output back to the host
-  checkCudaErrors(cudaMemcpy(h_outputImageRGBA, d_outputImageRGBA__, sizeof(uchar4) * numPixels, cudaMemcpyDeviceToHost));
+  checkCudaErrors(cudaMemcpy(h_outputImageRGBA, d_outputImageRGBA, sizeof(uchar4) * numPixels, cudaMemcpyDeviceToHost));
+  for (int i = 20; i < 40; i++) {
+    for (int j = 50; j < 70; j++) {
+      uchar4 h_dedugger = h_outputImageRGBA[i*numRows()+j];
+      printf("%d ", h_dedugger.x);
+    }
+    printf("\n");
+  }
 
   postProcess(output_file, h_outputImageRGBA);
 
