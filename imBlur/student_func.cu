@@ -102,6 +102,7 @@
 
 #include "utils.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 __global__
 void gaussian_blur(const unsigned char* const inputChannel,
@@ -129,7 +130,7 @@ void gaussian_blur(const unsigned char* const inputChannel,
            }
       }
   }
-  outputChannel[absolute_image_position_y*numCols+absolute_image_position_x] = 10;
+  outputChannel[absolute_image_position_y*numCols+absolute_image_position_x] = value;
 
   // NOTE: Be careful not to try to access memory that is outside the bounds of
   // the image. You'll want code that performs the following check before accessing
@@ -248,12 +249,12 @@ void your_gaussian_blur(const uchar4 * const h_inputImageRGBA, uchar4 * const d_
                         const float* const h_filter)
 {
   //TODO: Set reasonable block size (i.e., number of threads per block)
-  const dim3 blockSize(64,64);
+  const dim3 blockSize(16,16);
 
   //TODO:
   //Compute correct grid size (i.e., number of blocks per kernel launch)
   //from the image size and and block size.
-  const dim3 gridSize(numCols/64+1, numRows/64+1);
+  const dim3 gridSize(numCols/16+1, numRows/16+1);
 
   allocateMemoryAndCopyToGPU(numRows, numCols, h_filter, filterWidth);
   //TODO: Launch a kernel for separating the RGBA image into different color channels

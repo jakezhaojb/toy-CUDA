@@ -100,14 +100,6 @@ int main(int argc, char **argv) {
   size_t numPixels = numRows()*numCols();
   //copy the output back to the host
   checkCudaErrors(cudaMemcpy(h_outputImageRGBA, d_outputImageRGBA, sizeof(uchar4) * numPixels, cudaMemcpyDeviceToHost));
-  for (int i = 20; i < 40; i++) {
-    for (int j = 50; j < 70; j++) {
-      uchar4 h_dedugger = h_outputImageRGBA[i*numRows()+j];
-      printf("%d ", h_dedugger.x);
-    }
-    printf("\n");
-  }
-
   postProcess(output_file, h_outputImageRGBA);
 
   referenceCalculation(h_inputImageRGBA, h_outputImageRGBA,
